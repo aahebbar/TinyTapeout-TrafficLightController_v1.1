@@ -17,13 +17,20 @@ module tt_um_example (
 );
 
   // All output pins must be assigned. If not used, assign to 0.
-  assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
-  assign uio_out = 0;
-  assign uio_oe  = 0;
+  // assign uo_out  = ui_in + uio_in;  // Example: ou_out is the sum of ui_in and uio_in
+    assign uio_out = {7'b000_0000, _unused};
+    assign uio_oe  = 8'b0000_0001;
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, clk, rst_n, 1'b0};
-
+    wire _unused = &{ena, clk, rst_n, 1'b0, ui_in, uio_in};
+    wire rst = ~rst_n;
+    
+    trafficLight trafficLightController (
+        .clk(clk),
+        .rst(rst),
+        .signal(uo_out)
+    );
+    
 endmodule
 
 
